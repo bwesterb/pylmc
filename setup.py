@@ -21,7 +21,6 @@ setup(name='pylmc',
 	      'Topic :: Software Development :: Libraries',
 	      'Topic :: Software Development :: Assemblers',
 	      'Topic :: Software Development :: Code Generators',
-	      'Topic :: Software Development :: Compiler',
 	      'Topic :: Software Development :: Disassemblers'
       ],
       author_email='bas@westerbaan.name',
