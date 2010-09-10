@@ -1,0 +1,9 @@
+*.pyo
+*.pyc
+*.swp
+*.lmco
+/*.egg-info
+/build
+/dist
+MANIFEST
+RELEASE-VERSION
