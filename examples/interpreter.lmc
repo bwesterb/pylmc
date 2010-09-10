@@ -1,0 +1,116 @@
+		# An interpreter for LMC machinecode written in LMC.
+		# ------------------------------------------------------------
+		# 
+		# This program executes LMC machine code at offset `offset'.
+
+		# I.  Loads current instruction in `instr'
+		# ------------------------------------------------------------
+pc		LDA offset
+		STA instr
+
+		# II.  Executes divmod(instr, 100) and stores quotient in
+		# `instr_code' and rest in `instr_arg'.
+		# ------------------------------------------------------------
+		STA instr_arg
+		LDA zero
+		STA instr_code
+dm_loop		LDA instr_arg
+		BRZ dm_done
+		SUB hundred
+		BRP dm_next
+dm_done		BRA dm_exit
+dm_next		STA instr_arg
+		LDA instr_code
+		ADD one
+		STA instr_code
+		BRA dm_loop
+
+		# III.  Execute `LDA instr; BRA <jt + instr_arg>'
+		# ------------------------------------------------------------
+dm_exit		LDA bra_jt
+		ADD instr_code
+		STA jump
+		LDA instr
+jump		HLT
+
+		# IV.  Jump to the designated handler
+		# ------------------------------------------------------------
+jt		HLT			# 0 HLT
+		BRA do_simple		# 1 ADD
+		BRA do_simple		# 2 SUB
+		BRA do_simple		# 3 STA
+		HLT			
+		BRA do_simple		# 5 LDA
+		BRA do_bra		# 6 BRA
+		BRA do_brz		# 7 BRZ
+		BRA do_brp		# 8 BRP
+		BRA do_io		# 9 OUT / INP
+
+		# V-I.  Executes a simple instruction which has an argument and
+		# doesn't branch.  (ADD, SUB, STA and LDA)
+		# ------------------------------------------------------------
+do_simple	ADD dat_offset		# adjust for displacement
+		STA instr
+		LDA acc			# load their accum.
+instr		HLT
+		STA acc
+		
+		# Increase the program counter one and loop back to I
+inc_pc		LDA one
+		ADD pc
+
+		# Store acc. in pc annd loop back to I
+_sta_bra_pc	STA pc
+		BRA pc
+
+		# V-II.  Executes a BRZ
+		# ------------------------------------------------------------
+do_brz		LDA acc
+		BRZ do_bra		# check their accum.
+		BRA inc_pc		# isn't zero: just inc pc
+
+		# V-III.  Executes a BRA
+		# ------------------------------------------------------------
+do_bra		LDA instr_arg
+		ADD lda_instr
+		BRA _sta_bra_pc
+
+		# V-IV.  Executes a BRP
+		# ------------------------------------------------------------
+do_brp		LDA acc
+		BRP do_bra		# check their accum.
+		BRA inc_pc		# isn't pos: just inc pc
+
+		# V-V.  Executes an OUT or INP
+		# ------------------------------------------------------------
+do_io		SUB __out		# check if its an OUT
+		BRZ do_out
+		INP			# nope: execute INP
+		STA acc
+		BRA inc_pc		# and increase pointer
+
+		# Execute the OUT
+do_out		LDA acc
+__out		OUT
+		BRA inc_pc
+
+
+		# The constants
+		# --------------------------------------------------------
+zero		DAT 000
+one		DAT 001
+bra_jt		BRA jt
+add_offset	ADD offset
+lda_instr	LDA offset
+dat_offset	DAT offset
+
+		# Variables
+		# --------------------------------------------------------
+acc		DAT 000
+instr_arg	DAT 600
+hundred		DAT 100
+instr_code	DAT 000
+
+
+offset		HLT
+
