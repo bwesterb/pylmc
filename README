@@ -1,0 +1,7 @@
+PyLMC
+-----
+
+PyLMC provides an interpreter and assembler for the educational
+"The Little Man Computer" architecture as described here:
+
+	http://www.atkinson.yorku.ca/~sychen/research/LMC/LMCHome.html
