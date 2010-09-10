@@ -1,0 +1,12 @@
+# Example taken from
+#	http://www.atkinson.yorku.ca/~sychen/research/LMC/LMCMath.html
+INP
+STA FIRST
+INP
+ADD FIRST
+OUT
+INP
+SUB FIRST
+OUT
+HLT
+FIRST DAT

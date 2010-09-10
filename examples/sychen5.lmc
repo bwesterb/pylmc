@@ -1,0 +1,16 @@
+# Example taken from
+#	www.atkinson.yorku.ca/~sychen/research/LMC/LMCLoops.html
+LDA ONE
+STA COUNT
+OUT
+LOOPTOP LDA COUNT
+ADD ONE
+OUT
+STA COUNT
+SUB TEN
+BRP ENDLOOP
+BRA LOOPTOP
+ENDLOOP HLT
+ONE DAT 001
+TEN DAT 010
+COUNT DAT

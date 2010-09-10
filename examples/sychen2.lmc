@@ -1,0 +1,13 @@
+# Example taken from
+#	http://www.atkinson.yorku.ca/~sychen/research/LMC/LMCMemory.html
+NP
+STA FIRST
+INP
+STA SECOND
+LDA FIRST
+OUT
+LDA SECOND
+OUT
+HLT
+FIRST DAT
+SECOND DAT
